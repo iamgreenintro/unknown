@@ -1,0 +1,10 @@
+{
+  "name": "app-administrator-e2e",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": "apps/app-administrator-e2e/src",
+  "tags": [],
+  "implicitDependencies": ["app-administrator"],
+  "// targets": "to see all targets run: nx show project app-administrator-e2e --web",
+  "targets": {}
+}
