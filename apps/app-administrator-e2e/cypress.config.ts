@@ -11,6 +11,9 @@ export default defineConfig({
       },
       ciWebServerCommand: 'npx nx run app-administrator:serve-static',
       ciBaseUrl: 'http://localhost:4200',
+      webServerConfig: {
+        timeout: 30000, // 30s, increase when needed as test scenarios grow.
+      },
     }),
     baseUrl: 'http://localhost:4200',
   },

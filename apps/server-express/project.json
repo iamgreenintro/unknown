@@ -1,0 +1,35 @@
+{
+  "name": "server-express",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/server-express/src",
+  "projectType": "application",
+  "tags": [],
+  "targets": {
+    "serve": {
+      "continuous": true,
+      "executor": "@nx/js:node",
+      "defaultConfiguration": "development",
+      "dependsOn": ["build"],
+      "options": {
+        "buildTarget": "server-express:build",
+        "runBuildTargetDependencies": false
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "server-express:build:development"
+        },
+        "production": {
+          "buildTarget": "server-express:build:production"
+        }
+      }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/apps/server-express"],
+      "options": {
+        "jestConfig": "apps/server-express/jest.config.ts",
+        "passWithNoTests": true
+      }
+    }
+  }
+}
