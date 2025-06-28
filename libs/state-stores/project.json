@@ -1,16 +1,16 @@
 {
-  "name": "list-view",
-  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "libs/list-and-table-views/list-view/src",
+  "name": "state-stores",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/state-stores/src",
   "prefix": "lib",
   "projectType": "library",
-  "tags": [],
+  "tags": ["scope:state-stores"],
   "targets": {
     "test": {
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
-        "jestConfig": "libs/list-and-table-views/list-view/jest.config.ts"
+        "jestConfig": "libs/state-stores/jest.config.ts"
       }
     },
     "lint": {

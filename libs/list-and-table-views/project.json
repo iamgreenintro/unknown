@@ -1,7 +1,7 @@
 {
-  "name": "table-view",
-  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "libs/list-and-table-views/table-view/src",
+  "name": "list-and-table-views",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/list-and-table-views/src",
   "prefix": "lib",
   "projectType": "library",
   "tags": [],
@@ -10,7 +10,7 @@
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
-        "jestConfig": "libs/list-and-table-views/table-view/jest.config.ts"
+        "jestConfig": "libs/list-and-table-views/jest.config.ts"
       }
     },
     "lint": {

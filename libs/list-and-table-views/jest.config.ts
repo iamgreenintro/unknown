@@ -1,8 +1,8 @@
 export default {
-  displayName: 'table-view',
-  preset: '../../../jest.preset.js',
+  displayName: 'list-and-table-views',
+  preset: '../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
-  coverageDirectory: '../../../coverage/libs/list-and-table-views/table-view',
+  coverageDirectory: '../../coverage/libs/list-and-table-views',
   transform: {
     '^.+\\.(ts|mjs|js|html)$': [
       'jest-preset-angular',

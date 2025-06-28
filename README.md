@@ -1,82 +1,67 @@
 # Unknown
 
-<a alt="Nx logo" href="https://nx.dev" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="45"></a>
+## Running (and testing) applications, servers and libraries inside the workspace:
 
-✨ Your new, shiny [Nx workspace](https://nx.dev) is almost ready ✨.
+The Nx workspace has a base `package.json` file where scripts are mentioned to serve the applications, run unit tests for the applications and run e2e tests for the applications.
 
-[Learn more about this workspace setup and its capabilities](https://nx.dev/getting-started/tutorials/angular-monorepo-tutorial?utm_source=nx_project&amp;utm_medium=readme&amp;utm_campaign=nx_projects) or run `npx nx graph` to visually explore what was created. Now, let's get you up to speed!
+A general rule of thumb is that all projects have their own `:start`, `:unit-test` and `:e2e-test` suffix, which might look like the following:
 
-## Finish your CI setup
-
-[Click here to finish setting up your workspace!](https://cloud.nx.app/connect/Rr55wmf6Eo)
-
-
-## Run tasks
-
-To run the dev server for your app, use:
-
-```sh
-npx nx serve app-administrator
+```json
+{
+  "scripts": {
+    "administrator:start": "nx serve app-administrator",
+    "administrator:unit-test": "nx test app-administrator",
+    "administrator:e2e-test": "nx e2e app-administrator-e2e",
+    "express:start": "nx serve server-express",
+    "express:unit-test": "nx test server-express",
+    "express:e2e-test": "nx e2e server-express-e2e",
+    "libs:state-stores:test": "nx test state-stores",
+    "libs:list-and-table-views:test": "nx test list-and-table-views"
+  }
+}
 ```
 
-To create a production bundle:
+To serve or test the **app-administrator** application inside the `/apps` directory you would then any of the following commands:
 
 ```sh
-npx nx build app-administrator
+npm run administrator:start
+npm run administrator:unit-test
+npm run administrator:e2e-test
 ```
 
-To see all available targets to run for a project, run:
+## Nx CLI:
 
-```sh
-npx nx show project app-administrator
-```
-
-These targets are either [inferred automatically](https://nx.dev/concepts/inferred-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) or defined in the `project.json` or `package.json` files.
-
-[More about running tasks in the docs &raquo;](https://nx.dev/features/run-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## Add new projects
+### Add new projects
 
 While you could add new projects to your workspace manually, you might want to leverage [Nx plugins](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) and their [code generation](https://nx.dev/features/generate-code?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) feature.
 
 Use the plugin's generator to create new projects.
 
+To generate a new component, use:
+
+```sh
+npx nx g @nx/angular:component component_name
+```
+
 To generate a new application, use:
 
 ```sh
-npx nx g @nx/angular:app demo
+npx nx g @nx/angular:app app_name
 ```
 
 To generate a new library, use:
 
 ```sh
-npx nx g @nx/angular:lib mylib
+npx nx g @nx/angular:lib libs/lib_name (and optionally chain --tags=scope:scopename)
 ```
 
 You can use `npx nx list` to get a list of installed plugins. Then, run `npx nx list <plugin-name>` to learn about more specific capabilities of a particular plugin. Alternatively, [install Nx Console](https://nx.dev/getting-started/editor-setup?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) to browse plugins and generators in your IDE.
 
-[Learn more about Nx plugins &raquo;](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) | [Browse the plugin registry &raquo;](https://nx.dev/plugin-registry?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-
-[Learn more about Nx on CI](https://nx.dev/ci/intro/ci-with-nx#ready-get-started-with-your-provider?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## Install Nx Console
-
-Nx Console is an editor extension that enriches your developer experience. It lets you run tasks, generate code, and improves code autocompletion in your IDE. It is available for VSCode and IntelliJ.
-
-[Install Nx Console &raquo;](https://nx.dev/getting-started/editor-setup?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## Useful links
+### Useful links
 
 Learn more:
 
-- [Learn more about this workspace setup](https://nx.dev/getting-started/tutorials/angular-monorepo-tutorial?utm_source=nx_project&amp;utm_medium=readme&amp;utm_campaign=nx_projects)
+- [Learn more about this workspace setup](https://nx.dev/getting-started/tutorials/angular-monorepo-tutorial?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
 - [Learn about Nx on CI](https://nx.dev/ci/intro/ci-with-nx?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
 - [Releasing Packages with Nx release](https://nx.dev/features/manage-releases?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
 - [What are Nx plugins?](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-And join the Nx community:
-- [Discord](https://go.nx.dev/community)
-- [Follow us on X](https://twitter.com/nxdevtools) or [LinkedIn](https://www.linkedin.com/company/nrwl)
-- [Our Youtube channel](https://www.youtube.com/@nxdevtools)
-- [Our blog](https://nx.dev/blog?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)

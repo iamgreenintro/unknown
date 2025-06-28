@@ -8,7 +8,9 @@
     "administrator:e2e-test": "nx e2e app-administrator-e2e",
     "express:start": "nx serve server-express",
     "express:unit-test": "nx test server-express",
-    "express:e2e-test": "nx e2e server-express-e2e"
+    "express:e2e-test": "nx e2e server-express-e2e",
+    "libs:state-stores:test": "nx test state-stores",
+    "libs:list-and-table-views:test": "nx test list-and-table-views"
   },
   "private": true,
   "dependencies": {

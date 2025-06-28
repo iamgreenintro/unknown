@@ -15,12 +15,11 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@unknown/list-view": [
-        "libs/list-and-table-views/list-view/src/index.ts"
+      "@unknown/list-and-table-views": [
+        "libs/list-and-table-views/src/index.ts"
       ],
-      "@unknown/table-view": [
-        "libs/list-and-table-views/table-view/src/index.ts"
-      ]
+
+      "@unknown/state-stores": ["libs/state-stores/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

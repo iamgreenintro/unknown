@@ -2,9 +2,9 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'lib-table-view',
+  selector: 'list-view',
   imports: [CommonModule],
-  templateUrl: './table-view.html',
-  styleUrl: './table-view.css',
+  templateUrl: './list-view.html',
+  styleUrl: './list-view.css',
 })
-export class TableView {}
+export class ListView {}
