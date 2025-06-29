@@ -6,7 +6,7 @@
     "administrator:start": "nx serve app-administrator",
     "administrator:unit-test": "nx test app-administrator",
     "administrator:e2e-test": "nx e2e app-administrator-e2e",
-    "express:start": "nx serve server-express",
+    "express:start": "nx serve server-express --configuration=development",
     "express:unit-test": "nx test server-express",
     "express:e2e-test": "nx e2e server-express-e2e",
     "libs:state-stores:test": "nx test state-stores",

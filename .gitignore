@@ -44,3 +44,7 @@ Thumbs.db
 .github/instructions/nx.instructions.md
 
 .angular
+
+# Environment files (exclude development):
+apps/**/.env*
+!apps/**/.env.development
