@@ -1,22 +1,10 @@
-/**
- * This is not a production server yet!
- * This is only a minimal backend to get started.
- */
+import { App } from './server';
 
-import express from 'express';
-import * as path from 'path';
+import IndexRoute from './routes/index';
 
-const app = express();
+// Routes we want to be handled by our Express App:
+const routes = [new IndexRoute()];
 
-app.use('/assets', express.static(path.join(__dirname, 'assets')));
+const app = new App(routes);
 
-app.get('/api', (req, res) => {
-  res.send({ message: 'Hello API' });
-});
-
-const port = process.env.PORT || 3001;
-const server = app.listen(port, () => {
-  console.log(`Listening at http://localhost:${port}/api`);
-});
-
-server.on('error', console.error);
+app.listen();
