@@ -9,8 +9,9 @@
     "express:start": "nx serve server-express --configuration=development",
     "express:unit-test": "nx test server-express",
     "express:e2e-test": "nx e2e server-express-e2e",
-    "libs:state-stores:test": "nx test state-stores",
-    "libs:list-and-table-views:test": "nx test list-and-table-views"
+    "libs:state-stores:unit-test": "nx test state-stores",
+    "libs:list-and-table-views:unit-test": "nx test list-and-table-views",
+    "libs:validators:unit-test": "nx test validators"
   },
   "private": true,
   "dependencies": {
@@ -64,6 +65,7 @@
     "jest-environment-jsdom": "^29.7.0",
     "jest-environment-node": "^29.7.0",
     "jest-preset-angular": "~14.6.0",
+    "jsonc-eslint-parser": "^2.1.0",
     "mongoose": "^8.16.1",
     "nx": "21.2.1",
     "prettier": "^2.6.2",

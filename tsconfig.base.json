@@ -18,8 +18,8 @@
       "@unknown/list-and-table-views": [
         "libs/list-and-table-views/src/index.ts"
       ],
-
-      "@unknown/state-stores": ["libs/state-stores/src/index.ts"]
+      "@unknown/state-stores": ["libs/state-stores/src/index.ts"],
+      "@unknown/validators": ["libs/validators/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
