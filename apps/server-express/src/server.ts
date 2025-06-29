@@ -8,6 +8,7 @@ import {
   ACCESS_CONTROL_ALLOW_ORIGIN_VALUE,
 } from './../config';
 import { RouterInterface } from './data-structures/interfaces/router';
+import { connect } from 'mongoose';
 
 export class App {
   private app!: express.Application;
@@ -36,7 +37,7 @@ export class App {
     this.hostname = API_HOSTNAME || '127.0.0.1';
 
     this.initializeRoutes(routes);
-    // this.connectMongoDB();
+    this.connectMongoDB();
   }
 
   public listen() {
@@ -55,15 +56,15 @@ export class App {
     });
   }
 
-  // private async connectMongoDB() {
-  //   try {
-  //     if (this.env === 'development') {
-  //       await connect(`${DB_CONNECTION_STRING}/${DB_CONNECTION_NAME}`);
-  //     } else {
-  //       await connect(`${DB_CONNECTION_STRING}`);
-  //     }
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // }
+  private async connectMongoDB() {
+    try {
+      if (this.env === 'development') {
+        await connect(`${DB_CONNECTION_STRING}/${DB_CONNECTION_NAME}`);
+      } else {
+        await connect(`${DB_CONNECTION_STRING}`);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
 }
