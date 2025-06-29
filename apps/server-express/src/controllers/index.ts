@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 
-export default class IndexController {
+export class IndexController {
   public index = (req: Request, res: Response, next: NextFunction) => {
     try {
       res.redirect(307, 'api');

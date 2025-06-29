@@ -1,8 +1,8 @@
 import { Router } from 'express';
 import { RouterInterface } from './../data-structures/interfaces/router';
-import IndexController from './../controllers/index';
+import { IndexController } from './../controllers/index';
 
-export default class IndexRoute implements RouterInterface {
+export class IndexRoute implements RouterInterface {
   // Set RouterInterface required properties:
   public path: string = '';
   public router: Router = Router();
