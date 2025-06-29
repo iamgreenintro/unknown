@@ -29,6 +29,11 @@ npm run administrator:unit-test
 npm run administrator:e2e-test
 ```
 
+## Managing environment variables:
+
+Each application can have multiple `.env` files. These **must** be located in the root directory of the application for Nx to process them correctly.
+This saves setting up extra configuration or using third-party packages only to have `.env` files in a subdirectory.
+
 ## Nx CLI:
 
 ### Add new projects

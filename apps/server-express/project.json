@@ -20,6 +20,9 @@
         },
         "production": {
           "buildTarget": "server-express:build:production"
+        },
+        "test": {
+          "buildTarget": "server-express:build:development"
         }
       }
     },
