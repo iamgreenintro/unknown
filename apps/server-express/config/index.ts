@@ -1,8 +1,3 @@
-import { config } from 'dotenv';
-
-// Grab config file based on NODE_ENV value:
-config({ path: `.env.${process.env.NODE_ENV || 'development'}.local` });
-
 // Export the environment variables to be accessible to our application:
 export const {
   NODE_ENV,

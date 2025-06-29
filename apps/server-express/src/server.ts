@@ -29,6 +29,8 @@ export class App {
       res.append('Access-Control-Allow-Credentials', 'true');
       next(); // Don't forget this or we will never return a response!
     });
+
+    console.log(API_PORT);
     this.env = NODE_ENV || 'development';
     this.port = API_PORT || 3001;
     this.hostname = API_HOSTNAME || '127.0.0.1';
