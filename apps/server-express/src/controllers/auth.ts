@@ -2,6 +2,7 @@ import { AuthService } from '../services/auth';
 import { ResponseInterface } from '../data-structures/interfaces/response';
 import { NextFunction, Request, Response } from 'express';
 import { UserValidator } from '@unknown/validators';
+import { ResponseBuilder } from '../helpers/response-builder';
 
 export class AuthController {
   private readonly authService: AuthService = new AuthService();
@@ -22,25 +23,19 @@ export class AuthController {
       });
 
       const serviceResponse = await this.authService.login({
-        username: username,
-        password: password,
+        username,
+        password,
       });
 
-      if (serviceResponse.error) {
-        throw new Error(serviceResponse.message);
-      } else {
-        // SUCCESS: Credentials were authenticated.
-        res.status(serviceResponse.code).json(serviceResponse);
-      }
+      res.status(serviceResponse.code).json(serviceResponse);
     } catch (error) {
+      console.log(error);
       if (error instanceof Error) {
-        const errorResponse: ResponseInterface = {
-          data: null,
-          error: true,
-          message: error.message,
-          code: 400,
-        };
-        res.status(errorResponse.code).json(errorResponse);
+        res.status(400).json(
+          ResponseBuilder.errorResponse({
+            message: error.message,
+          })
+        );
       } else {
         // Let Express handle the error for now:
         next(error);

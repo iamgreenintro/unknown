@@ -4,6 +4,7 @@ import { ResponseInterface } from './../data-structures/interfaces/response';
 import { scrypt, randomBytes } from 'crypto';
 import { UserValidator } from '@unknown/validators';
 import { scryptOptions } from '../services/auth';
+import { ResponseBuilder } from '../helpers/response-builder';
 
 export class UserController {
   private readonly userValidator = new UserValidator();
@@ -17,15 +18,14 @@ export class UserController {
     try {
       const serviceResponse = await this.userService.getUsers();
       res.status(serviceResponse.code).json(serviceResponse);
-    } catch (error) {
+    } catch (error: unknown) {
+      console.log(error);
       if (error instanceof Error) {
-        const errorResponse: ResponseInterface = {
-          data: null,
-          error: true,
-          message: error.message,
-          code: 400,
-        };
-        res.status(errorResponse.code).json(errorResponse);
+        res.status(400).json(
+          ResponseBuilder.errorResponse({
+            message: error.message,
+          })
+        );
       } else {
         // Let Express handle the error for now:
         next(error);
@@ -70,21 +70,17 @@ export class UserController {
       };
 
       const serviceResponse = await this.userService.createUser(userToCreate);
-
-      if (serviceResponse.error) {
-        throw new Error(serviceResponse.message);
-      }
-      // SUCCESS: A new user was created with given credentials.
       res.status(serviceResponse.code).json(serviceResponse);
-    } catch (error) {
+
+      // Catch errors:
+    } catch (error: unknown) {
+      console.log(error);
       if (error instanceof Error) {
-        const errorResponse: ResponseInterface = {
-          data: null,
-          error: true,
-          message: error.message,
-          code: 400,
-        };
-        res.status(errorResponse.code).json(errorResponse);
+        res.status(400).json(
+          ResponseBuilder.errorResponse({
+            message: error.message,
+          })
+        );
       } else {
         // Let Express handle the error for now:
         next(error);

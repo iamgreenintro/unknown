@@ -1,69 +1,84 @@
 import { ResponseInterface } from '../data-structures/interfaces/response';
 import { UserModel } from '../data-structures/models/mongo/user';
+import { BadRequestError } from '../helpers/error-builder';
+import { ResponseBuilder } from '../helpers/response-builder';
 
 export class UserService {
   public async getUsers(): Promise<ResponseInterface> {
     try {
       const users = await UserModel.find();
-      const response: ResponseInterface = {
-        data: users,
-        message: '',
-        error: false,
-        code: 200,
-      };
 
-      return response;
-    } catch (error) {
-      if (error instanceof Error) {
-        const response: ResponseInterface = {
-          data: null,
-          message: error.message,
-          error: true,
-          code: 400,
-        };
-        return response;
+      if (!!users) {
+        throw new BadRequestError(
+          'Something went wrong while trying to retrieve users from the collection.'
+        );
       }
-      const response: ResponseInterface = {
-        data: null,
-        message: 'Error occured while attempting to create a new user.',
-        error: true,
-        code: 400,
-      };
-      return response;
+
+      return ResponseBuilder.successResponse(users, {
+        message: 'A collection of users was successfully retrieved.',
+      });
+
+      // Catch errors:
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        return ResponseBuilder.errorResponse({
+          message: error.message,
+        });
+      }
+
+      if (error instanceof BadRequestError) {
+        return ResponseBuilder.errorResponse({
+          message: error.message,
+          code: error.code,
+        });
+      }
+
+      return ResponseBuilder.errorResponse({
+        message: 'Error occured while attempting to retrieve users.',
+      });
     }
   }
 
   public async createUser(payload: any): Promise<ResponseInterface> {
     try {
       const createdUser = await UserModel.create(payload);
-      const response: ResponseInterface = {
-        data: createdUser,
-        message: '',
-        error: false,
-        code: 200,
-      };
-      return response;
-    } catch (err: any) {
-      if (err.code === 11000) {
-        // Duplicate key encountered, user most likely exists already.
-        const response: ResponseInterface = {
-          data: null,
-          message: 'Username already exists.',
-          error: true,
-          code: 409,
-        };
-        return response;
+
+      if (!createdUser) {
+        throw new BadRequestError(
+          'Something went wrong while trying to create a new user.'
+        );
       }
 
-      // Unknown error, check response or log it for debugging purposes:
-      // console.error(err);
-      const response: ResponseInterface = {
-        data: null,
+      return ResponseBuilder.successResponse(createdUser, {
+        message: 'A new user was successfully created',
+      });
+
+      // Catch errors:
+    } catch (error: any) {
+      if (error.code === 11000) {
+        // Duplicate key encountered, user most likely exists already.
+        return ResponseBuilder.errorResponse({
+          message: 'Username already exists.',
+          code: ResponseBuilder.ERROR_CODES.BAD_REQUEST, // instead of 409 CONFLICT due to security
+        });
+      }
+
+      if (error instanceof Error) {
+        return ResponseBuilder.errorResponse({
+          message: error.message,
+        });
+      }
+
+      if (error instanceof BadRequestError) {
+        return ResponseBuilder.errorResponse({
+          message: error.message,
+          code: error.code,
+        });
+      }
+
+      return ResponseBuilder.errorResponse({
         message: 'Error occured while attempting to create a new user.',
-        error: true,
-        code: 400,
-      };
-      return response;
+      });
     }
   }
 }

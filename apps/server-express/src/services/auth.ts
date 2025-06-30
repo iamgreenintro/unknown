@@ -1,6 +1,8 @@
 import { scrypt, ScryptOptions } from 'crypto';
 import { UserModel } from '../data-structures/models/mongo/user';
 import { ResponseInterface } from '../data-structures/interfaces/response';
+import { ResponseBuilder } from '../helpers/response-builder';
+import { BadRequestError, UnauthorizedError } from '../helpers/error-builder';
 
 export const scryptOptions: ScryptOptions = {
   // Tweak for ideal duration
@@ -9,101 +11,105 @@ export const scryptOptions: ScryptOptions = {
   maxmem: 256 * 1024 * 1024, // error out on > 256mb
 };
 
-export class AuthService {
+export class AuthService implements ResponseBuilder {
   public async login(payload: {
     username: string;
     password: string;
   }): Promise<ResponseInterface> {
     try {
       if (!payload || !payload.username || !payload.password) {
-        throw new Error(`Missing credentials. Can not authenticate.`);
+        throw new BadRequestError(`Missing credentials`);
       }
 
-      const user: { password: string; salt: string } | null =
-        await UserModel.findOne({
-          username: payload.username,
-        });
+      const user = await UserModel.findOne({
+        username: payload.username,
+      }).lean();
 
+      // Username not found:
       if (!user) {
-        throw new Error(
-          `Can not find any user with username: "${payload.username}"`
-        );
+        throw new BadRequestError(`Username does not exist.`);
       }
 
-      const validCredentials = await this.isHashedPasswordMatching(
+      const isValidPassword = await this.isHashedPasswordMatching(
         payload.password,
         user.password,
         user.salt
       );
 
-      if (!validCredentials) {
-        throw new Error(`Invalid password for username: "${payload.username}"`);
+      // Incorrect password but username exists:
+      if (!isValidPassword) {
+        throw new UnauthorizedError(
+          `Invalid username and password combination.`
+        );
       }
 
-      const response: ResponseInterface = {
-        data: user,
-        message: '',
-        error: false,
-        code: 200,
-      };
+      return ResponseBuilder.successResponse(user, {
+        message: 'Successfully logged in.',
+      });
 
-      return response;
-    } catch (error: any) {
-      if (error instanceof Error) {
-        const response: ResponseInterface = {
-          data: null,
+      // Catch failures:
+    } catch (error: unknown) {
+      if (error instanceof BadRequestError || error instanceof Error) {
+        return ResponseBuilder.errorResponse({
           message: error.message,
-          error: true,
-          code: 400,
-        };
-        return response;
+        });
       }
 
-      // Unknown error, check response or log it for debugging purposes:
-      // console.error(err);
-      const response: ResponseInterface = {
-        data: null,
-        message: 'Error occured while attempting to login.',
-        error: true,
-        code: 400,
-      };
-      return response;
+      if (error instanceof BadRequestError) {
+        return ResponseBuilder.errorResponse({
+          message: error.message,
+          code: error.code,
+        });
+      }
+
+      if (error instanceof UnauthorizedError) {
+        return ResponseBuilder.errorResponse({
+          message: error.message,
+          code: ResponseBuilder.ERROR_CODES.UNAUTHORIZED,
+        });
+      }
+
+      return ResponseBuilder.errorResponse({
+        message: 'Unknown error occured while attempting to login.',
+      });
     }
   }
 
   public async findUser(userID: string): Promise<ResponseInterface> {
     try {
       if (!userID) {
-        throw new Error(
+        throw new BadRequestError(
           'No userID provided. Can not continue with finding user.'
         );
       }
       const user = await UserModel.findById(userID);
-      const response: ResponseInterface = {
-        data: user,
-        message: '',
-        error: false,
-        code: 200,
-      };
-      return response;
-    } catch (error) {
-      if (error instanceof Error) {
-        const response: ResponseInterface = {
-          data: null,
-          message: error.message,
-          error: true,
-          code: 400,
-        };
-        return response;
+
+      if (!user) {
+        throw new BadRequestError(`User with id ${userID} does not exist.`);
       }
 
-      const response: ResponseInterface = {
-        data: null,
+      return ResponseBuilder.successResponse({
+        message: 'Successfully retrieved user.',
+      });
+
+      // Catch failures:
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        return ResponseBuilder.errorResponse({
+          message: error.message,
+        });
+      }
+
+      if (error instanceof BadRequestError) {
+        return ResponseBuilder.errorResponse({
+          message: error.message,
+          code: error.code,
+        });
+      }
+
+      return ResponseBuilder.errorResponse({
         message: 'Error occured while attempting to find user.',
-        error: true,
-        code: 400,
-      };
-      return response;
+      });
     }
   }
 
