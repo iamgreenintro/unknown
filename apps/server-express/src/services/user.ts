@@ -8,7 +8,7 @@ export class UserService {
     try {
       const users = await UserModel.find();
 
-      if (!!users) {
+      if (!users) {
         throw new BadRequestError(
           'Something went wrong while trying to retrieve users from the collection.'
         );

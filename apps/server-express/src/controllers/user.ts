@@ -1,23 +1,25 @@
 import { NextFunction, Request, Response } from 'express';
 import { UserService } from './../services/user';
-import { ResponseInterface } from './../data-structures/interfaces/response';
 import { scrypt, randomBytes } from 'crypto';
 import { UserValidator } from '@unknown/validators';
 import { scryptOptions } from '../services/auth';
 import { ResponseBuilder } from '../helpers/response-builder';
+import { ResponseInterface } from '../data-structures/interfaces/response';
 
 export class UserController {
   private readonly userValidator = new UserValidator();
-  private userService: UserService = new UserService();
+  private readonly userService: UserService = new UserService();
 
   public getUsers = async (
     req: Request,
     res: Response,
     next: NextFunction
-  ): Promise<void> => {
+  ): Promise<Response<ResponseInterface>> => {
     try {
       const serviceResponse = await this.userService.getUsers();
-      res.status(serviceResponse.code).json(serviceResponse);
+      return res.status(serviceResponse.code).json(serviceResponse);
+
+      // Catch errors:
     } catch (error: unknown) {
       console.log(error);
       if (error instanceof Error) {
@@ -37,7 +39,7 @@ export class UserController {
     req: Request,
     res: Response,
     next: NextFunction
-  ): Promise<void> => {
+  ): Promise<Response<ResponseInterface>> => {
     try {
       const { password, username } = req.body;
 
@@ -70,7 +72,7 @@ export class UserController {
       };
 
       const serviceResponse = await this.userService.createUser(userToCreate);
-      res.status(serviceResponse.code).json(serviceResponse);
+      return res.status(serviceResponse.code).json(serviceResponse);
 
       // Catch errors:
     } catch (error: unknown) {

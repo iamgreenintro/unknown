@@ -12,7 +12,7 @@ export class AuthController {
     req: Request,
     res: Response,
     next: NextFunction
-  ): Promise<void> => {
+  ): Promise<Response<ResponseInterface>> => {
     try {
       const { username, password } = req.body;
 
@@ -27,7 +27,9 @@ export class AuthController {
         password,
       });
 
-      res.status(serviceResponse.code).json(serviceResponse);
+      return res.status(serviceResponse.code).json(serviceResponse);
+
+      // Catch errors:
     } catch (error) {
       console.log(error);
       if (error instanceof Error) {

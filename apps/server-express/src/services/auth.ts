@@ -1,4 +1,6 @@
 import { scrypt, ScryptOptions } from 'crypto';
+import jwt from 'jsonwebtoken';
+import { JWT_SECRET } from 'apps/server-express/config';
 import { UserModel } from '../data-structures/models/mongo/user';
 import { ResponseInterface } from '../data-structures/interfaces/response';
 import { ResponseBuilder } from '../helpers/response-builder';
@@ -43,9 +45,16 @@ export class AuthService implements ResponseBuilder {
         );
       }
 
-      return ResponseBuilder.successResponse(user, {
-        message: 'Successfully logged in.',
+      const token = jwt.sign({ userId: user._id.toHexString() }, JWT_SECRET, {
+        expiresIn: '30 min',
       });
+
+      return ResponseBuilder.successResponse(
+        { user, token },
+        {
+          message: 'Successfully logged in.',
+        }
+      );
 
       // Catch failures:
     } catch (error: unknown) {
