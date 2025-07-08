@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import { JWT_SECRET } from 'apps/server-express/config';
 import { BadRequestError } from '../helpers/error-builder';
+import { ResponseBuilder } from '../helpers/response-builder';
 
 export const checkJWT = (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -17,13 +18,20 @@ export const checkJWT = (req: Request, res: Response, next: NextFunction) => {
         throw new BadRequestError('Unable to verify JWT signature.');
       }
 
-      console.log(decodedJWT);
-
       req['user'] = decodedJWT;
       next();
     });
-  } catch (error) {
-    // Let Express handle the error for now:
-    next(error);
+  } catch (error: unknown) {
+    console.log(error);
+    if (error instanceof BadRequestError) {
+      res.status(error.code).json(
+        ResponseBuilder.errorResponse({
+          message: error.message,
+        })
+      );
+    } else {
+      // Let Express handle the error for now:
+      next(error);
+    }
   }
 };

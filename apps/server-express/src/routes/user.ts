@@ -13,7 +13,8 @@ export class UserRoute implements RouterInterface {
   }
 
   private initRoutes() {
-    this.router.get(this.path, checkJWT, this.controller.getUsers);
+    // this.router.get(this.path, checkJWT, this.controller.getUsers);
+    this.router.get(this.path, this.controller.getUsers);
     this.router.post(
       this.path + '/create',
       checkJWT,

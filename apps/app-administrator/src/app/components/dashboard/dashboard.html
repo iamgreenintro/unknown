@@ -1,0 +1,5 @@
+<ng-container *ngIf="!(isLoading$ | async); else loadingTemplate">
+  <button (click)="getUsers()">getUsers</button>
+  <button (click)="createNewUser()">createNewUser</button>
+</ng-container>
+<ng-template #loadingTemplate> Loading.. </ng-template>
