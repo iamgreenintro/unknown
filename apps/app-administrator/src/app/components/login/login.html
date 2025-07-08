@@ -1,1 +1,16 @@
-<p>login works!</p>
+<ng-container *ngIf="showLoginForm; else showRegisterForm">
+  <h4>Login:</h4>
+
+  <input id="username" type="text" [formControl]="username" />
+  <input id="password" type="password" [formControl]="password" />
+  <button (click)="login()" [disabled]="!password.valid || !password.valid">
+    Login
+  </button>
+</ng-container>
+<ng-template #showRegisterForm>
+  <h4>Register:</h4>
+
+  <input id="username" type="text" [formControl]="username" />
+  <input id="password" type="password" [formControl]="password" />
+  <button (click)="registerNewUser()" [disabled]="!password.valid || !password.valid">Register</button>
+</ng-template>
